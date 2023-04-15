@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package grpcProject;
 
-option go_package = "pb";
+option go_package = "./grpcProject/pb";
+
 
 message Keyboard {
   enum Layout{
