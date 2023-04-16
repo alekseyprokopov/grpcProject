@@ -1,107 +1,144 @@
 package sample
 
 import (
-	"github.com/google/uuid"
 	"grpcProject/pb"
 )
 
 func NewKeyboard() *pb.Keyboard {
-	return &pb.Keyboard{
+	keyboard := &pb.Keyboard{
 		Layout:  randomKeyboardLayout(),
 		Backlit: randomBool(),
 	}
+
+	return keyboard
 }
 
-func NewRam() *pb.Memory {
-	return &pb.Memory{
-		Value: uint64(randInt(4, 32)),
-		Unit:  pb.Memory_GIGABYTE,
-	}
-}
-
+// NewCPU returns a new sample CPU
 func NewCPU() *pb.CPU {
-	brands := []string{"intel", "amd"}
-	names := map[string][]string{
-		"inter": {"Intel Core M", "Intel Core i3", "Intel Core i5", "Intel Core i7"},
-		"amd":   {"AMD Ryzen 7", "AMD Ryzen 5", "AMD Ryzen 3", "AMD APU", "AMD FX"}}
-	minGhz := randFloat(1, 1.5)
-	maxGhz := randFloat(minGhz, 3)
-	return &pb.CPU{
-		Brand:  randomString(brands...),
-		Name:   randomString(names[randomString(brands...)]...),
-		MinGhz: minGhz,
-		MaxGhz: maxGhz}
+	brand := randomCPUBrand()
+	name := randomCPUName(brand)
 
+	numberCores := randomInt(2, 8)
+	numberThreads := randomInt(numberCores, 12)
+
+	minGhz := randomFloat64(2.0, 3.5)
+	maxGhz := randomFloat64(minGhz, 5.0)
+
+	cpu := &pb.CPU{
+		Brand:         brand,
+		Name:          name,
+		NumberCores:   uint32(numberCores),
+		NumberThreads: uint32(numberThreads),
+		MinGhz:        minGhz,
+		MaxGhz:        maxGhz,
+	}
+
+	return cpu
 }
 
+// NewGPU returns a new sample GPU
 func NewGPU() *pb.GPU {
-	brands := []string{"nvidia", "amd"}
-	names := map[string][]string{
-		"nvidia": {
-			"GeForce RTX 4080",
-			"GeForce RTX 4080 12GB",
-			"GeForce RTX 4070 Ti",
-			"GeForce RTX 4070",
-			"GeForce RTX 3090 Ti"},
-		"amd": {
-			"AMD Radeon RX 7900 XTX",
-			"AMD Radeon RX 7900 XT",
-			"AMD Radeon RX 6700",
-			"AMD Radeon RX 6650 XT",
-			"AMD Radeon RX 6750 XT"}}
-	minGhz := randFloat(1, 1.5)
-	maxGhz := randFloat(minGhz, 3)
-	return &pb.GPU{
-		Brand:  randomString(brands...),
-		Name:   randomString(names[randomString(brands...)]...),
+	brand := randomGPUBrand()
+	name := randomGPUName(brand)
+
+	minGhz := randomFloat64(1.0, 1.5)
+	maxGhz := randomFloat64(minGhz, 2.0)
+	memGB := randomInt(2, 6)
+
+	gpu := &pb.GPU{
+		Brand:  brand,
+		Name:   name,
 		MinGhz: minGhz,
 		MaxGhz: maxGhz,
 		Memory: &pb.Memory{
-			Value: uint64(randInt(1, 4)),
+			Value: uint64(memGB),
 			Unit:  pb.Memory_GIGABYTE,
-		}}
+		},
+	}
+
+	return gpu
 }
 
+// NewRAM returns a new sample RAM
+func NewRAM() *pb.Memory {
+	memGB := randomInt(4, 64)
+
+	ram := &pb.Memory{
+		Value: uint64(memGB),
+		Unit:  pb.Memory_GIGABYTE,
+	}
+
+	return ram
+}
+
+// NewSSD returns a new sample SSD
 func NewSSD() *pb.Storage {
-	return &pb.Storage{
+	memGB := randomInt(128, 1024)
+
+	ssd := &pb.Storage{
 		Driver: pb.Storage_SSD,
 		Memory: &pb.Memory{
-			Value: uint64(randInt(1, 4)),
-			Unit:  pb.Memory_TERABYTE,
+			Value: uint64(memGB),
+			Unit:  pb.Memory_GIGABYTE,
 		},
 	}
+
+	return ssd
 }
 
+// NewHDD returns a new sample HDD
 func NewHDD() *pb.Storage {
-	return &pb.Storage{
+	memTB := randomInt(1, 6)
+
+	hdd := &pb.Storage{
 		Driver: pb.Storage_HDD,
 		Memory: &pb.Memory{
-			Value: uint64(randInt(1, 4)),
+			Value: uint64(memTB),
 			Unit:  pb.Memory_TERABYTE,
 		},
 	}
+
+	return hdd
 }
 
+// NewScreen returns a new sample Screen
+func NewScreen() *pb.Screen {
+	screen := &pb.Screen{
+		SizeInch:   randomFloat32(13, 17),
+		Resolution: randomScreenResolution(),
+		Panel:      randomScreenPanel(),
+		Multitouch: randomBool(),
+	}
+
+	return screen
+}
+
+// NewLaptop returns a new sample Laptop
 func NewLaptop() *pb.Laptop {
-	brands := []string{"dell", "acer", "lenovo"}
-	names := map[string][]string{
-		"dell":   {"Alienware", "Latitude", "Precision", "Vostro"},
-		"acer":   {"Nitro AN517-41-R11Z", "Aspire 3 A317-53-58UL", "Extensa 15 EX 215-31-C6FV"},
-		"lenovo": {"Legion 5", "Yoga Slim 7", "IdeaPad 5 Gen 7"},
-	}
-	return &pb.Laptop{
-		Id:          uuid.New().String(),
-		Brand:       randomString(brands...),
-		Name:        randomString(names[randomString(brands...)]...),
-		Cpu:         NewCPU(),
-		Gpus:        []*pb.GPU{NewGPU(), NewGPU()},
-		Storages:    []*pb.Storage{NewSSD(), NewHDD()},
-		Keyboard:    NewKeyboard(),
-		Ram:         NewRam(),
-		PriceUsd:    float32(randFloat(100, 500)),
-		ReleaseYear: uint32(randInt(2010, 2020)),
+	brand := randomLaptopBrand()
+	name := randomLaptopName(brand)
+
+	laptop := &pb.Laptop{
+		Id:       randomID(),
+		Brand:    brand,
+		Name:     name,
+		Cpu:      NewCPU(),
+		Ram:      NewRAM(),
+		Gpus:     []*pb.GPU{NewGPU()},
+		Storages: []*pb.Storage{NewSSD(), NewHDD()},
+		Screen:   NewScreen(),
+		Keyboard: NewKeyboard(),
 		Weight: &pb.Laptop_WeightKg{
-			WeightKg: float32(randFloat(1.0, 3.0)),
+			WeightKg: randomFloat64(1.0, 3.0),
 		},
+		PriceUsd:    randomFloat64(1500, 3500),
+		ReleaseYear: uint32(randomInt(2015, 2019)),
 	}
+
+	return laptop
+}
+
+// RandomLaptopScore returns a random laptop score
+func RandomLaptopScore() float64 {
+	return float64(randomInt(1, 10))
 }
