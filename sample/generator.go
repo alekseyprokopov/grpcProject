@@ -1,6 +1,7 @@
 package sample
 
 import (
+	"github.com/google/uuid"
 	"grpcProject/pb"
 )
 
@@ -82,17 +83,25 @@ func NewHDD() *pb.Storage {
 }
 
 func NewLaptop() *pb.Laptop {
+	brands := []string{"dell", "acer", "lenovo"}
+	names := map[string][]string{
+		"dell":   {"Alienware", "Latitude", "Precision", "Vostro"},
+		"acer":   {"Nitro AN517-41-R11Z", "Aspire 3 A317-53-58UL", "Extensa 15 EX 215-31-C6FV"},
+		"lenovo": {"Legion 5", "Yoga Slim 7", "IdeaPad 5 Gen 7"},
+	}
 	return &pb.Laptop{
-		Id:,
-		Brand:,
-		Name:,
-		Cpu:      NewCPU(),
-		Gpus:     []*pb.GPU{NewGPU(), NewGPU()},
-		Storages: []*pb.Storage{NewSSD(), NewHDD()},
-		Keyboard: NewKeyboard(),
-		Ram:      NewRam(),
-		PriceUsd:,
-		ReleaseYear:,
-		Weight:,
+		Id:          uuid.New().String(),
+		Brand:       randomString(brands...),
+		Name:        randomString(names[randomString(brands...)]...),
+		Cpu:         NewCPU(),
+		Gpus:        []*pb.GPU{NewGPU(), NewGPU()},
+		Storages:    []*pb.Storage{NewSSD(), NewHDD()},
+		Keyboard:    NewKeyboard(),
+		Ram:         NewRam(),
+		PriceUsd:    float32(randFloat(100, 500)),
+		ReleaseYear: uint32(randInt(2010, 2020)),
+		Weight: &pb.Laptop_WeightKg{
+			WeightKg: float32(randFloat(1.0, 3.0)),
+		},
 	}
 }
