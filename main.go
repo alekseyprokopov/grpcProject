@@ -20,8 +20,4 @@ func main() {
 
 	}
 
-	fmt.Printf("1: %+v", laptop1)
-	fmt.Println("--------")
-	fmt.Printf("2: %+v \n", laptop2)
-
 }

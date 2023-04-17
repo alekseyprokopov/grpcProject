@@ -1,27 +1,27 @@
 {
-  "id": "3bfc3b5a-a53b-4d9c-b0a1-0c47a03ac2cc",
-  "brand": "Lenovo",
-  "name": "Thinkpad P53",
+  "id": "2656654c-57dc-42d2-9026-4de1f8427fe3",
+  "brand": "Dell",
+  "name": "Alienware",
   "cpu": {
-    "brand": "Intel",
-    "name": "Core i9-9980HK",
-    "number_cores": 6,
-    "number_threads": 8,
-    "min_ghz": 2.9363336069387174,
-    "max_ghz": 4.2804354008231
+    "brand": "AMD",
+    "name": "Ryzen 3 PRO 3200GE",
+    "number_cores": 5,
+    "number_threads": 12,
+    "min_ghz": 2.744891440930787,
+    "max_ghz": 3.103509258026568
   },
   "ram": {
-    "value": "34",
+    "value": "61",
     "unit": "GIGABYTE"
   },
   "gpus": [
     {
-      "brand": "Nvidia",
-      "name": "GTX 1070",
-      "min_ghz": 1.4346362823526415,
-      "max_ghz": 1.756650518108072,
+      "brand": "AMD",
+      "name": "RX Vega-56",
+      "min_ghz": 1.1533738395141817,
+      "max_ghz": 1.2001951006606446,
       "memory": {
-        "value": "3",
+        "value": "6",
         "unit": "GIGABYTE"
       }
     }
@@ -30,7 +30,7 @@
     {
       "driver": "SSD",
       "memory": {
-        "value": "835",
+        "value": "946",
         "unit": "GIGABYTE"
       }
     },
@@ -43,19 +43,19 @@
     }
   ],
   "screen": {
-    "size_inch": 14.7557535,
+    "size_inch": 15.30022,
     "resolution": {
-      "width": 5557,
-      "height": 3126
+      "width": 5189,
+      "height": 2919
     },
     "panel": "OLED",
     "multitouch": false
   },
   "keyboard": {
-    "layout": "AZERTY",
+    "layout": "QWERTY",
     "backlit": false
   },
-  "weight_kg": 1.3023562574746366,
-  "price_usd": 1640.7772211399717,
-  "release_year": 2016
+  "weight_kg": 1.5648155756562567,
+  "price_usd": 3189.9827252422133,
+  "release_year": 2018
 }

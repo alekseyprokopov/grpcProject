@@ -53,13 +53,14 @@ func TestLaptopServer_CreateLaptop(t *testing.T) {
 			name:   "duplicate_id",
 			laptop: laptopDuplicateId,
 			store:  storeDuplicate,
-			code:   codes.AlreadyExists,
+
+			code: codes.AlreadyExists,
 		},
 	}
 
 	for _, item := range testCases {
 		t.Run(item.name, func(t *testing.T) {
-
+			t.Parallel()
 			req := &pb.CreateLaptopRequest{
 				Laptop: item.laptop,
 			}

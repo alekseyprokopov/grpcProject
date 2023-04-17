@@ -10,6 +10,7 @@ var ErrAlreadyExists = errors.New("record already exists")
 
 type LaptopStore interface {
 	Save(laptop *pb.Laptop) error
+	Find(id string) (*pb.Laptop, error)
 }
 
 func NewMapStore() LaptopStore {
@@ -32,4 +33,15 @@ func (s *mapStore) Save(laptop *pb.Laptop) error {
 	}
 	s.data[laptop.Id] = laptop
 	return nil
+}
+
+func (s *mapStore) Find(id string) (*pb.Laptop, error) {
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+	item, ok := s.data[id]
+	if !ok {
+		return nil, nil
+	}
+
+	return item, nil
 }
