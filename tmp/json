@@ -1,25 +1,25 @@
 {
-  "id": "9e69bbee-9565-4f2c-a1be-72216130f039",
-  "brand": "Apple",
-  "name": "Macbook Pro",
+  "id": "3bfc3b5a-a53b-4d9c-b0a1-0c47a03ac2cc",
+  "brand": "Lenovo",
+  "name": "Thinkpad P53",
   "cpu": {
     "brand": "Intel",
-    "name": "Core i5-9400F",
-    "number_cores": 3,
-    "number_threads": 3,
-    "min_ghz": 2.4797043637262277,
-    "max_ghz": 3.8754204219957
+    "name": "Core i9-9980HK",
+    "number_cores": 6,
+    "number_threads": 8,
+    "min_ghz": 2.9363336069387174,
+    "max_ghz": 4.2804354008231
   },
   "ram": {
-    "value": "9",
+    "value": "34",
     "unit": "GIGABYTE"
   },
   "gpus": [
     {
-      "brand": "AMD",
-      "name": "RX 590",
-      "min_ghz": 1.3780587835596312,
-      "max_ghz": 1.8456805608184368,
+      "brand": "Nvidia",
+      "name": "GTX 1070",
+      "min_ghz": 1.4346362823526415,
+      "max_ghz": 1.756650518108072,
       "memory": {
         "value": "3",
         "unit": "GIGABYTE"
@@ -30,32 +30,32 @@
     {
       "driver": "SSD",
       "memory": {
-        "value": "175",
+        "value": "835",
         "unit": "GIGABYTE"
       }
     },
     {
       "driver": "HDD",
       "memory": {
-        "value": "2",
+        "value": "6",
         "unit": "TERABYTE"
       }
     }
   ],
   "screen": {
-    "size_inch": 14.664034,
+    "size_inch": 14.7557535,
     "resolution": {
-      "width": 7441,
-      "height": 4186
+      "width": 5557,
+      "height": 3126
     },
-    "panel": "IPS",
-    "multitouch": true
+    "panel": "OLED",
+    "multitouch": false
   },
   "keyboard": {
-    "layout": "QWERTY",
+    "layout": "AZERTY",
     "backlit": false
   },
-  "weight_kg": 2.736373498390904,
-  "price_usd": 2429.897440220717,
+  "weight_kg": 1.3023562574746366,
+  "price_usd": 1640.7772211399717,
   "release_year": 2016
 }

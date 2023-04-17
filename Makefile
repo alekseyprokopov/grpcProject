@@ -1,4 +1,6 @@
-.PHONY: gen run clear
+.PHONY: gen run clear test
+test:
+	go test -cover -race ./...
 run:
 	go run main.go
 gen:
