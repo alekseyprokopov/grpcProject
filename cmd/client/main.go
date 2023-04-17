@@ -9,6 +9,7 @@ import (
 	"grpcProject/pb"
 	"grpcProject/sample"
 	"log"
+	"time"
 )
 
 func main() {
@@ -28,14 +29,17 @@ func main() {
 		Laptop: newLaptop,
 	}
 
-	res, err := laptopClient.CreateLaptop(context.Background(), req)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	res, err := laptopClient.CreateLaptop(ctx, req)
 
 	if err != nil {
 		st, ok := status.FromError(err)
 		if ok && st.Code() == codes.AlreadyExists {
 			log.Printf("already exist")
 		} else {
-			log.Fatal("can't create laptop ")
+			log.Fatal("can't create laptop: ", err)
 		}
 		return
 	}

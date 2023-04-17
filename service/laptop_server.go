@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 	"grpcProject/pb"
 	"log"
+	"time"
 )
 
 type LaptopServer struct {
@@ -44,6 +45,18 @@ func (s *LaptopServer) CreateLaptop(ctx context.Context, req *pb.CreateLaptopReq
 		}
 		return nil, status.Errorf(code, "already exists :%v", err)
 	}
+	//heavy operations:
+	time.Sleep(6 * time.Second)
+	if ctx.Err() == context.Canceled {
+		log.Print("request is canceled")
+		return nil, status.Error(codes.Canceled, "request is canceled")
+	}
+
+	if ctx.Err() == context.DeadlineExceeded {
+		log.Print("deadline is exceeded")
+		return nil, status.Error(codes.DeadlineExceeded, "deadline is exceeded")
+	}
+
 	log.Printf("saved laptop with id :%s", laptop.Id)
 	res := &pb.CreateLaptopResponse{
 		Id: laptop.Id,
