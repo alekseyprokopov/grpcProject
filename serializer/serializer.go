@@ -2,7 +2,7 @@ package serializer
 
 import (
 	"fmt"
-	"google.golang.org/protobuf/proto"
+	"github.com/golang/protobuf/proto"
 	"log"
 	"os"
 )
@@ -13,7 +13,9 @@ func WriteProtobufToBinaryFile(message proto.Message, filename string) error {
 		return fmt.Errorf("cannot marshal proto message to binary: %w", err)
 	}
 
-	os.WriteFile(filename, data, 0666)
+	if err := os.WriteFile(filename, data, 0666); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -29,5 +31,17 @@ func ReadProtobufFromBinaryFile(filename string, message proto.Message) error {
 		return fmt.Errorf("cannot unmarshal proto file: %w", err)
 	}
 
+	return nil
+}
+
+func WriteProtobufToJSONfile(message proto.Message, filename string) error {
+	data, err := ProtobufToJSON(message)
+	if err != nil {
+		return fmt.Errorf("cannot ProtobufToJSON file: %w", err)
+	}
+
+	if err := os.WriteFile(filename, []byte(data), 0666); err != nil {
+		return err
+	}
 	return nil
 }
