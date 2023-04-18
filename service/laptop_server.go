@@ -8,7 +8,6 @@ import (
 	"google.golang.org/grpc/status"
 	"grpcProject/pb"
 	"log"
-	"time"
 )
 
 type LaptopServer struct {
@@ -46,7 +45,7 @@ func (s *LaptopServer) CreateLaptop(ctx context.Context, req *pb.CreateLaptopReq
 		return nil, status.Errorf(code, "already exists :%v", err)
 	}
 	//heavy operations:
-	time.Sleep(6 * time.Second)
+	//time.Sleep(6 * time.Second)
 	if ctx.Err() == context.Canceled {
 		log.Print("request is canceled")
 		return nil, status.Error(codes.Canceled, "request is canceled")
@@ -68,7 +67,7 @@ func (s *LaptopServer) SearchLaptop(req *pb.SearchLaptopRequest, stream pb.Lapto
 	filter := req.GetFilter()
 	log.Printf("receive a search-laptop request with filter %+v", filter)
 
-	err := s.Store.Search(filter, func(laptop *pb.Laptop) error {
+	err := s.Store.Search(stream.Context(), filter, func(laptop *pb.Laptop) error {
 		res := &pb.SearchLaptopResponse{
 			Laptop: laptop,
 		}

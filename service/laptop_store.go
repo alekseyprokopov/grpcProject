@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"grpcProject/pb"
+	"log"
 	"sync"
 )
 
@@ -11,7 +13,7 @@ var ErrAlreadyExists = errors.New("record already exists")
 type LaptopStore interface {
 	Save(laptop *pb.Laptop) error
 	Find(id string) (*pb.Laptop, error)
-	Search(filter *pb.Filter, found func(laptop *pb.Laptop) error) error
+	Search(ctx context.Context, filter *pb.Filter, found func(laptop *pb.Laptop) error) error
 }
 
 func NewMapStore() LaptopStore {
@@ -26,11 +28,15 @@ type mapStore struct {
 	data  map[string]*pb.Laptop
 }
 
-func (s *mapStore) Search(filter *pb.Filter, found func(laptop *pb.Laptop) error) error {
+func (s *mapStore) Search(ctx context.Context, filter *pb.Filter, found func(laptop *pb.Laptop) error) error {
 	s.mutex.RLock()
 	defer s.mutex.RUnlock()
 
 	for _, laptop := range s.data {
+		if ctx.Err() == context.Canceled {
+			log.Printf("context is cancelled")
+			return errors.New("context is cancelled")
+		}
 		if isQualified(filter, laptop) {
 			err := found(laptop)
 

@@ -31,8 +31,8 @@ func main() {
 
 	filter := &pb.Filter{
 		MaxPriceUsd: 3000,
-		MinCpuGhz:   2,
-		MinCpuCores: 3}
+		MinCpuGhz:   2.5,
+		MinCpuCores: 4}
 	searchLaptop(laptopClient, filter)
 
 }
@@ -53,6 +53,7 @@ func searchLaptop(laptopClient pb.LaptopServiceClient, filter *pb.Filter) {
 
 	for {
 		res, err := stream.Recv()
+		log.Printf("RESPONSE: %+v", res)
 		if err == io.EOF {
 			return
 		}
