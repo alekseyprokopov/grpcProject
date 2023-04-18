@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package grpcProject;
+
+option go_package = "../pb";
+
+
+message Filter {
+  double max_price_usd = 1;
+  uint32 min_cpu_cores = 2;
+  double min_cpu_ghz = 3;
+}

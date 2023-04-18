@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 	"grpcProject/pb"
 	"grpcProject/sample"
+	"io"
 	"log"
 	"time"
 )
@@ -24,6 +25,47 @@ func main() {
 
 	laptopClient := pb.NewLaptopServiceClient(conn)
 
+	for i := 0; i < 10; i++ {
+		createLaptop(laptopClient)
+	}
+
+	filter := &pb.Filter{
+		MaxPriceUsd: 3000,
+		MinCpuGhz:   2,
+		MinCpuCores: 3}
+	searchLaptop(laptopClient, filter)
+
+}
+
+func searchLaptop(laptopClient pb.LaptopServiceClient, filter *pb.Filter) {
+	log.Printf("search filter: %+v", filter)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	searchReq := &pb.SearchLaptopRequest{
+		Filter: filter,
+	}
+
+	stream, err := laptopClient.SearchLaptop(ctx, searchReq)
+	if err != nil {
+		log.Fatal("can't search laptop: ", err)
+	}
+
+	for {
+		res, err := stream.Recv()
+		if err == io.EOF {
+			return
+		}
+		if err != nil {
+			log.Fatal("can't receive response: ", err)
+		}
+		laptop := res.GetLaptop()
+		log.Printf("founded laptop: %+v", laptop)
+	}
+
+}
+
+func createLaptop(laptopClient pb.LaptopServiceClient) {
 	newLaptop := sample.NewLaptop()
 	req := &pb.CreateLaptopRequest{
 		Laptop: newLaptop,

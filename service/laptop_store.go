@@ -11,6 +11,7 @@ var ErrAlreadyExists = errors.New("record already exists")
 type LaptopStore interface {
 	Save(laptop *pb.Laptop) error
 	Find(id string) (*pb.Laptop, error)
+	Search(filter *pb.Filter, found func(laptop *pb.Laptop) error) error
 }
 
 func NewMapStore() LaptopStore {
@@ -23,6 +24,22 @@ func NewMapStore() LaptopStore {
 type mapStore struct {
 	mutex sync.RWMutex
 	data  map[string]*pb.Laptop
+}
+
+func (s *mapStore) Search(filter *pb.Filter, found func(laptop *pb.Laptop) error) error {
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+
+	for _, laptop := range s.data {
+		if isQualified(filter, laptop) {
+			err := found(laptop)
+
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func (s *mapStore) Save(laptop *pb.Laptop) error {
@@ -44,4 +61,19 @@ func (s *mapStore) Find(id string) (*pb.Laptop, error) {
 	}
 
 	return item, nil
+}
+
+func isQualified(filter *pb.Filter, laptop *pb.Laptop) bool {
+	if filter.GetMinCpuGhz() < laptop.GetCpu().GetMinGhz() {
+		return false
+	}
+
+	if filter.GetMaxPriceUsd() < laptop.GetPriceUsd() {
+		return false
+	}
+	if filter.GetMinCpuCores() < laptop.GetCpu().GetNumberCores() {
+		return false
+	}
+
+	return true
 }
