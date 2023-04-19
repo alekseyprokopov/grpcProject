@@ -1,4 +1,4 @@
-.PHONY: gen clear test server client
+.PHONY: test gen clear server client
 test:
 	go test -cover -race ./...
 gen:
